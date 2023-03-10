@@ -5,7 +5,7 @@ namespace RazorHotelDB.Pages.Hotels
 {
     public class UpdateHotelModel : PageModel
     {
-        public void OnGet()
+        public void OnGet(int id)
         {
         }
     }
