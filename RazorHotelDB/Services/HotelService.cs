@@ -1,26 +1,78 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using RazorHotelDB.Interfaces;
 using RazorHotelDB.Models;
+using System.Xml.Linq;
 
 namespace RazorHotelDB.Services
 {
     public class HotelService : Connection, IHotelService
     {
         private string queryString = "select * from Hotel";
+        private string queryFilter = "select * from Hotel where Name like @Name";
+        private string queryCreate = "insert into Hotel Values(@ID, @Navn, @Adresse)";
+        private string queryDelete = "delete from Booking where Hotel_No = @HotelNr;" +
+                                    "delete from Room where Hotel_No = @HotelNr;" +
+                                    "delete from Hotel where Hotel_No = @HotelNr;";
+        private string queryUpdate = "update Hotel set Hotel_No = @ID, Name = '@Name', Address = '@Address';" +
+                                     "where Hotel_No = @HotelNr;";
 
         public HotelService(IConfiguration configuration) : base(configuration)
         {
         }
 
-        public Task<bool> CreateHotelAsync(Hotel hotel)
+        public async Task<bool> CreateHotelAsync(Hotel hotel)
         {
-            throw new NotImplementedException();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    SqlCommand command = new SqlCommand(queryCreate, connection);
+                    command.Parameters.AddWithValue("@ID", hotel.HotelNr);
+                    command.Parameters.AddWithValue("@Navn", hotel.Navn);
+                    command.Parameters.AddWithValue("@Adresse", hotel.Adresse);
+                    await command.Connection.OpenAsync();
+                    int result = await command.ExecuteNonQueryAsync();
+                    return result == 1;
+                }
+                catch (SqlException sqlEx)
+                {
+                    Console.WriteLine("Database error " + sqlEx.Message);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Generel error " + ex.Message);
+                }
+            }
+            return false;
         }
 
-        public Task<Hotel> DeleteHotelAsync(int hotelNr)
+        public async Task<Hotel> DeleteHotelAsync(int hotelNr)
         {
-            throw new NotImplementedException();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    SqlCommand command = new SqlCommand(queryDelete, connection);
+                    command.Parameters.AddWithValue("@HotelNr", hotelNr);
+                    await command.Connection.OpenAsync();
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
+                    if (await reader.ReadAsync())
+                    {
+                        return await GetHotelFromIdAsync(hotelNr);
+                    }
+                }
+                catch (SqlException sqlEx)
+                {
+                    Console.WriteLine("Database error " + sqlEx.Message);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Generel fejl " + ex.Message);
+                }
+            }
+            return null;
         }
 
         public async Task<List<Hotel>> GetAllHotelAsync()
@@ -33,9 +85,7 @@ namespace RazorHotelDB.Services
                     try
                     {
                         await command.Connection.OpenAsync();//aSynkront
-                        Thread.Sleep(1000);
-                        SqlDataReader reader = await command.ExecuteReaderAsync();//aSynkront
-                        Thread.Sleep(1000);
+                        SqlDataReader reader = await command.ExecuteReaderAsync();//aSynkront                        
                         while (await reader.ReadAsync())
                         {
                             int hotelNr = reader.GetInt32(0);
@@ -60,20 +110,96 @@ namespace RazorHotelDB.Services
             return hoteller;
         }
 
-
-        public Task<Hotel> GetHotelFromIdAsync(int hotelNr)
+        public async Task<Hotel> GetHotelFromIdAsync(int hotelNr)
         {
-            throw new NotImplementedException();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    SqlCommand command = new SqlCommand(queryUpdate, connection);
+                    command.Parameters.AddWithValue("@ID", hotelNr);
+                    await command.Connection.OpenAsync();
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
+                    if (await reader.ReadAsync())
+                    {
+                        int hotelNo = reader.GetInt32(0);
+                        string hotelNavn = reader.GetString(1);
+                        string hotelAdr = reader.GetString(2);
+                        Hotel h = new Hotel(hotelNo, hotelNavn, hotelAdr);
+                        return h;
+                    }
+                }
+                catch (SqlException sqlEx)
+                {
+                    Console.WriteLine("Database error " + sqlEx.Message);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Generel fejl " + ex.Message);
+                }
+            }
+            return null;
         }
 
-        public Task<List<Hotel>> GetHotelsByNameAsync(string name)
-        {
-            throw new NotImplementedException();
+        public async Task<List<Hotel>> GetHotelsByNameAsync(string name) {
+            List<Hotel> hotels = new List<Hotel>();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    SqlCommand commmand = new SqlCommand(queryFilter, connection);
+                    string nameWildcard = "%" + name + "%";
+                    commmand.Parameters.AddWithValue("@Name", nameWildcard);
+                    await commmand.Connection.OpenAsync();
+                    SqlDataReader reader = await commmand.ExecuteReaderAsync();
+                    while (await reader.ReadAsync())
+                    {
+                        int hotelNr = reader.GetInt32(0);
+                        string hotelName = reader.GetString(1);
+                        string hotelAdr = reader.GetString(2);
+                        Hotel hotel = new Hotel(hotelNr, hotelName, hotelAdr);
+                        hotels.Add(hotel);
+                    }
+                }
+                catch (SqlException sqlEx)
+                {
+                    Console.WriteLine("Database error " + sqlEx.Message);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Generel error " + ex.Message);
+                }
+                return hotels;
+            }
+            return null;
         }
 
-        public Task<bool> UpdateHotelAsync(Hotel hotel, int hotelNr)
+        public async Task<bool> UpdateHotelAsync(Hotel hotel, int hotelNr)
         {
-            throw new NotImplementedException();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    SqlCommand command = new SqlCommand(queryUpdate, connection);                    
+                    command.Parameters.AddWithValue("HotelNr", hotelNr);                
+                    command.Parameters.AddWithValue("@ID", hotel.HotelNr);
+                    command.Parameters.AddWithValue("@Navn", hotel.Navn);
+                    command.Parameters.AddWithValue("@Adresse", hotel.Adresse);
+                    await command.Connection.OpenAsync();
+                    SqlDataReader reader = await command.ExecuteReaderAsync();
+                    int updated = await command.ExecuteNonQueryAsync();
+                    return updated == 1;
+                }
+                catch (SqlException sqlEx)
+                {
+                    Console.WriteLine("Database error " + sqlEx.Message);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Generel fejl " + ex.Message);
+                }
+            }
+            return false;
         }
     }
 }
