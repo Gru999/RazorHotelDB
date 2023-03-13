@@ -5,8 +5,34 @@
 }
 
 @*Use check boxes to pick hotels to delete, would need to make it seperate page*@
-@*show gotel about to be delted*@
+@*show hotel about to be delted*@
 @*make button that shows the hotel and redirects to the onpost and deletes the hotel*@
 
 <h1>Hotel about to be deleted</h1>
-
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="@Model.Hotel.HotelNr" />
+            <div class="form-group">
+                <label asp-for="@Model.Hotel.Navn" class="control-label"></label>
+                <input asp-for="@Model.Hotel.Navn" class="form-control" />
+                
+            </div>
+            <p></p>
+            <div class="form-group">
+                <label asp-for="@Model.Hotel.Adresse" class="control-label"></label>
+                <input asp-for="@Model.Hotel.Adresse" class="form-control" />
+                
+            </div>
+            <p></p><p></p>
+            <div class="formgroup">
+                <input type="submit" value="Delete" class="btn btn-primary" />
+            </div>
+            <p></p>
+        </form>
+    </div>
+    <div>
+        <a asp-page="GetAllHotels">Cancel</a>
+    </div>
+</div>

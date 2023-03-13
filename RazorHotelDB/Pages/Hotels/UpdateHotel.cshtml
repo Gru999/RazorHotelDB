@@ -4,4 +4,34 @@
     ViewData["Title"] = "Update Hotel";
 }
 
-@*Pick hotel to update with radio buttons would need to make it seperate page *@
+<h1>Update the Hotel below</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <input asp-for="@Model.Hotel.HotelNr" type="hidden" />
+            <div class="form-group">
+                <label asp-for="@Model.Hotel.Navn" class="control-label"></label>
+                <input asp-for="@Model.Hotel.Navn" class="form-control" />
+                <span asp-validation-for="Hotel.Navn" class="text-danger"></span>
+            </div>
+            <p></p>
+            <div class="form-group">
+                <label asp-for="@Model.Hotel.Adresse" class="control-label"></label>
+                <input asp-for="@Model.Hotel.Adresse" class="form-control" />
+            </div>
+            <p></p>
+            <div class="form-group">
+                <input type="submit" value="Save updated Hotel" class="btn btn-primary" />
+            </div>
+            <p></p>
+            <div class="formgroup">
+                <input type="submit" value="Delete Hotel" asp-page-handler="Delete" class="btn btn-primary" />
+            </div>
+            <p></p>
+            <div>
+                <a asp-page="GetAllHotels">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

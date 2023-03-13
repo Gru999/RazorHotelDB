@@ -5,29 +5,29 @@ using RazorHotelDB.Interfaces;
 using RazorHotelDB.Models;
 using System.Xml.Linq;
 
-namespace RazorHotelDB.Services
-{
-    public class HotelService : Connection, IHotelService
-    {
+namespace RazorHotelDB.Services {
+    public class HotelService : Connection, IHotelService {
         private string queryString = "select * from Hotel";
+
         private string queryFilter = "select * from Hotel where Name like @Name";
+
         private string queryCreate = "insert into Hotel Values(@ID, @Navn, @Adresse)";
+
         private string queryDelete = "delete from Booking where Hotel_No = @HotelNr;" +
                                     "delete from Room where Hotel_No = @HotelNr;" +
                                     "delete from Hotel where Hotel_No = @HotelNr;";
-        private string queryUpdate = "update Hotel set Hotel_No = @ID, Name = '@Name', Address = '@Address';" +
+
+        private string queryUpdate = "update Hotel set Hotel_No = @HotelNr, Name = @Navn, Address = @Adresse;" +
                                      "where Hotel_No = @HotelNr;";
 
-        public HotelService(IConfiguration configuration) : base(configuration)
-        {
+        private string queryFilterId = "select * from Hotel where Hotel_No = @ID";
+
+        public HotelService(IConfiguration configuration) : base(configuration) {
         }
 
-        public async Task<bool> CreateHotelAsync(Hotel hotel)
-        {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                try
-                {
+        public async Task<bool> CreateHotelAsync(Hotel hotel) {
+            using (SqlConnection connection = new SqlConnection(connectionString)) {
+                try {
                     SqlCommand command = new SqlCommand(queryCreate, connection);
                     command.Parameters.AddWithValue("@ID", hotel.HotelNr);
                     command.Parameters.AddWithValue("@Navn", hotel.Navn);
@@ -36,12 +36,10 @@ namespace RazorHotelDB.Services
                     int result = await command.ExecuteNonQueryAsync();
                     return result == 1;
                 }
-                catch (SqlException sqlEx)
-                {
+                catch (SqlException sqlEx) {
                     Console.WriteLine("Database error " + sqlEx.Message);
                 }
-                catch (Exception ex)
-                {
+                catch (Exception ex) {
                     Console.WriteLine("Generel error " + ex.Message);
                 }
             }
@@ -116,7 +114,7 @@ namespace RazorHotelDB.Services
             {
                 try
                 {
-                    SqlCommand command = new SqlCommand(queryUpdate, connection);
+                    SqlCommand command = new SqlCommand(queryFilterId, connection);
                     command.Parameters.AddWithValue("@ID", hotelNr);
                     await command.Connection.OpenAsync();
                     SqlDataReader reader = await command.ExecuteReaderAsync();
@@ -181,8 +179,7 @@ namespace RazorHotelDB.Services
                 try
                 {
                     SqlCommand command = new SqlCommand(queryUpdate, connection);                    
-                    command.Parameters.AddWithValue("HotelNr", hotelNr);                
-                    command.Parameters.AddWithValue("@ID", hotel.HotelNr);
+                    command.Parameters.AddWithValue("HotelNr", hotelNr);
                     command.Parameters.AddWithValue("@Navn", hotel.Navn);
                     command.Parameters.AddWithValue("@Adresse", hotel.Adresse);
                     await command.Connection.OpenAsync();
