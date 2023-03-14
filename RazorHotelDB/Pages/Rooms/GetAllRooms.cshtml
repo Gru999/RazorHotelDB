@@ -1,0 +1,49 @@
+﻿@page
+@model RazorHotelDB.Pages.Rooms.GetAllRoomsModel
+@using RazorHotelDB.Models
+@{
+    ViewData["Title"] = "GetAllRooms";
+}
+<h1>Get all Rooms </h1>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="@Model.HotelNr" class="custom-control-label"></label>
+        <select name="hid">
+            <option value="">Select a hotel</option>
+            @foreach (Hotel item in @Model.Hotels)
+            {
+                <option value="@item.HotelNr">@item.Navn</option>
+            }
+        </select>
+    </div>
+    <p></p>
+    <input type="submit" value="Rooms for hotel" />
+</form>
+
+@if (Model.Rooms != null && Model.Rooms.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Room Number</th>
+                <th>Hotel Number</th>
+                <th>Room Type</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var room in Model.Rooms)
+            {
+                <tr>
+                    <td>@room.RoomNr</td>
+                    <td>@room.HotelNr</td>
+                    <td>@room.Types</td>
+                    <td>@room.Pris</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
