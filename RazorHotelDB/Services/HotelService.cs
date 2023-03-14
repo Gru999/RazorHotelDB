@@ -17,8 +17,7 @@ namespace RazorHotelDB.Services {
                                     "delete from Room where Hotel_No = @HotelNr;" +
                                     "delete from Hotel where Hotel_No = @HotelNr;";
 
-        private string queryUpdate = "update Hotel set Hotel_No = @HotelNr, Name = @Navn, Address = @Adresse;" +
-                                     "where Hotel_No = @HotelNr;";
+        private string queryUpdate = "update Hotel set Hotel_No = @HotelNr, Name = @Navn, Address = @Adresse where Hotel_No = @HotelNr;";
 
         private string queryFilterId = "select * from Hotel where Hotel_No = @ID";
 
@@ -183,7 +182,6 @@ namespace RazorHotelDB.Services {
                     command.Parameters.AddWithValue("@Navn", hotel.Navn);
                     command.Parameters.AddWithValue("@Adresse", hotel.Adresse);
                     await command.Connection.OpenAsync();
-                    SqlDataReader reader = await command.ExecuteReaderAsync();
                     int updated = await command.ExecuteNonQueryAsync();
                     return updated == 1;
                 }
