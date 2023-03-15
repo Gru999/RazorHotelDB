@@ -40,6 +40,10 @@
                     <td>@room.HotelNr</td>
                     <td>@room.Types</td>
                     <td>@room.Pris</td>
+                    <td>
+                        <a asp-page="UpdateHotel" asp-route-id="@room.HotelNr">Update</a> |
+                        <a asp-page="DeleteHotel" asp-route-id="@room.HotelNr">Delete</a>
+                    </td>
                 </tr>
             }
         </tbody>
