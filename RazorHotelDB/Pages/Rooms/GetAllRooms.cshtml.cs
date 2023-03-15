@@ -12,7 +12,7 @@ namespace RazorHotelDB.Pages.Rooms
         private IHotelService _hotelService;
 
         [BindProperty(SupportsGet = true)]
-        public int RoomNr { get; set; }
+        public int HotelNr { get; set; }
         public List<Hotel> Hotels { get; set; }
         public List<Room> Rooms { get; set; }
 
