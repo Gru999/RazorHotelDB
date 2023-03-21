@@ -6,8 +6,10 @@
 }
 <h1>Get all Rooms </h1>
 
+
 <form method="post">
     <div class="form-group">
+        @*find a change for @Model.HotelNr below*@
         <label asp-for="@Model.HotelNr" class="custom-control-label"></label>
         <select name="hid">
             <option value="">Select a hotel</option>
@@ -20,6 +22,8 @@
     <p></p>
     <input type="submit" value="Rooms for hotel" />
 </form>
+
+
 
 @if (Model.Rooms != null && Model.Rooms.Any())
 {
@@ -41,8 +45,8 @@
                     <td>@room.Types</td>
                     <td>@room.Pris</td>
                     <td>
-                        <a asp-page="UpdateHotel" asp-route-id="@room.HotelNr">Update</a> |
-                        <a asp-page="DeleteHotel" asp-route-id="@room.HotelNr">Delete</a>
+                        <a asp-page="UpdateRoom" asp-route-hid="@room.HotelNr" asp-route-rid="@room.RoomNr">Update</a> |
+                        <a asp-page="DeleteRoom" asp-route-hid="@room.HotelNr" asp-route-rid="@room.RoomNr">Delete</a>
                     </td>
                 </tr>
             }

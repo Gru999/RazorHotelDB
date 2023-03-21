@@ -1,4 +1,51 @@
 ﻿@page
+@using RazorHotelDB.Models
 @model RazorHotelDB.Pages.Rooms.UpdateRoomModel
 @{
+    ViewData["Title"] = "Update Room";
 }
+
+<h1>Update the Room below</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <input asp-for="@Model.Room.RoomNr" type="hidden" />
+            <div class="form-group">
+                <label asp-for="@Model.Room.RoomNr" class="control-label"></label>
+                <input asp-for="@Model.Room.RoomNr" class="form-control" />
+                <span asp-validation-for="Room.RoomNr" class="text-danger"></span>
+            </div>
+            <p></p>
+            <div class="form-group">
+                <label asp-for="@Model.Room.HotelNr" class="control-label"></label>
+                <input asp-for="@Model.Room.HotelNr" class="form-control" />
+                <span asp-validation-for="Room.HotelNr" class="text-danger"></span>
+            </div>
+            <p></p>
+            <div class="form-group">
+                <label asp-for="@Model.Room.Types" class="control-label"></label>
+                <select asp-for="@Model.RoomType" asp-items="Html.GetEnumSelectList<RoomType>()" class="form-control">
+                </select>
+            </div>
+
+            <p></p>
+            <div class="form-group">
+                <label asp-for="@Model.Room.Pris" class="control-label"></label>
+                <input asp-for="@Model.Room.Pris" class="form-control" />
+            </div>
+            <p></p>
+            <div class="form-group">
+                <input type="submit" value="Save updated Room" class="btn btn-primary" />
+            </div>
+            <p></p>
+            <div class="formgroup">
+                <input type="submit" value="Delete Room" asp-page-handler="Delete" class="btn btn-primary" />
+            </div>
+            <p></p>
+            <div>
+                <a asp-page="GetAllRooms">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,4 +1,36 @@
 ﻿@page
 @model RazorHotelDB.Pages.Rooms.DeleteRoomModel
 @{
+    ViewData["Title"] = "Delte Room";
 }
+
+<h1>Room about to be deleted</h1>
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="@Model.Room.RoomNr" />
+            <div class="form-group">
+                <label asp-for="@Model.Room.HotelNr" class="control-label"></label>
+                <input asp-for="@Model.Room.HotelNr" class="form-control" />
+            </div>
+            <p></p>
+            <div class="form-group">
+                <label asp-for="@Model.Room.Types" class="control-label"></label>
+                <input asp-for="@Model.Room.Types" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Room.Pris" class="control-label"></label>
+                <input asp-for="@Model.Room.Pris" class="form-control" />
+            </div>
+            <p></p><p></p>
+            <div class="formgroup">
+                <input type="submit" value="Delete" class="btn btn-primary" />
+            </div>
+            <p></p>
+        </form>
+    </div>
+    <div>
+        <a asp-page="GetAllRooms">Cancel</a>
+    </div>
+</div>

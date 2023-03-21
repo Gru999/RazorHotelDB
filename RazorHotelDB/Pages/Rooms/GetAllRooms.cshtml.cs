@@ -11,6 +11,7 @@ namespace RazorHotelDB.Pages.Rooms
         private IRoomService _roomService;
         private IHotelService _hotelService;
 
+        //HotelNr only bind to @Model.HotelNr and then never used
         [BindProperty(SupportsGet = true)]
         public int HotelNr { get; set; }
         public List<Hotel> Hotels { get; set; }
@@ -22,11 +23,6 @@ namespace RazorHotelDB.Pages.Rooms
             _hotelService = hotelService;
             Hotels = new List<Hotel>();
         }
-        //public async Task<IActionResult> OnGetAsync()
-        //{
-        //    Hotels = await _hotelService.GetAllHotelAsync();
-        //    return Page();
-        //}
 
         public async Task<IActionResult> OnGetAsync(int hid)
         {
