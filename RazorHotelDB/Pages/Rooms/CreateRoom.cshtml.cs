@@ -19,7 +19,7 @@ namespace RazorHotelDB.Pages.Rooms
         [BindProperty]
         public RoomType RoomType { get; set; }
 
-        [BindProperty]
+        
         public bool createResult { get; set; }
 
         

@@ -12,7 +12,7 @@ namespace RazorHotelDB.Services
         /// </summary>
         private string queryString = "select * from Room where Hotel_No = @hotelNr";
         private string queryCreate = "if exists (select * from Room where Hotel_No = @hotelNr) " +
-                                     "begin insert into Room (Room_No, Hotel_No, Types, Price) values (@roomNr, @hotelNr, @type, @price); " +
+                                     "begin insert into Room (Room_No, Hotel_No, Types, Price) values (@roomNr, @hotelNr, @type, @price) " +
                                      "end";
         private string queryDelete = "if exists (select * from Room where Hotel_No = @hotelNr and Room_No = @roomNr) " +
                                      "begin delete from Booking where Hotel_No = @hotelNr and Room_No = @roomNr " +

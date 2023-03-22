@@ -8,7 +8,7 @@
         public Connection(IConfiguration configuration)
         {
             Configuration = configuration;
-            connectionString = Configuration["ConnectionStrings:DefaultConnection"];
+            connectionString = Configuration["ConnectionStrings:SimplyStorage"];
         }
     }
 }

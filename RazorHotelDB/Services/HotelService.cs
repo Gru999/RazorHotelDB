@@ -11,11 +11,11 @@ namespace RazorHotelDB.Services {
 
         private string queryFilter = "select * from Hotel where Name like @Name";
 
-        private string queryCreate = "insert into Hotel Values(@ID, @Navn, @Adresse)";
+        private string queryCreate = "insert into Hotel (Hotel_No, Name, Address) values (@ID, @Navn, @Adresse)";
 
         private string queryDelete = "delete from Booking where Hotel_No = @HotelNr;" +
-                                    "delete from Room where Hotel_No = @HotelNr;" +
-                                    "delete from Hotel where Hotel_No = @HotelNr;";
+                                     "delete from Room where Hotel_No = @HotelNr;" +
+                                     "delete from Hotel where Hotel_No = @HotelNr;";
 
         private string queryUpdate = "update Hotel set Hotel_No = @HotelNr, Name = @Navn, Address = @Adresse where Hotel_No = @HotelNr;";
 

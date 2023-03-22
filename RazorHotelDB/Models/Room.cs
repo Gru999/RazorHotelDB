@@ -1,9 +1,11 @@
-﻿namespace RazorHotelDB.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace RazorHotelDB.Models
 {
     public class Room
-    {
-        public int RoomNr { get; set; }
-        public char Types { get; set; }
+    {        
+        public int RoomNr { get; set; }       
+        public char Types { get; set; }        
         public double Pris { get; set; }
         public int HotelNr { get; set; }
 
