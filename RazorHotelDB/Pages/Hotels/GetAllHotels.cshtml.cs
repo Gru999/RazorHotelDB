@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
 using RazorHotelDB.Interfaces;
 using RazorHotelDB.Models;
@@ -18,13 +19,25 @@ namespace RazorHotelDB.Pages.Hotels
         {
             _hotelService = hotelService;
         }
-        public async Task OnGetAsync()
+        public async Task OnGetAsync(string sortOrder)
         {
             if (!FilterCriteria.IsNullOrEmpty()) {
                 Hotels = await _hotelService.GetHotelsByNameAsync(FilterCriteria);
             }
             else {
                 Hotels = await _hotelService.GetAllHotelAsync();
+            }
+
+            switch (sortOrder) {
+                case "name":
+                    Hotels = Hotels.OrderBy(h => h.Navn).ToList(); 
+                    break;
+                case "address":
+                    Hotels = Hotels.OrderBy(h => h.Adresse).ToList(); 
+                    break;
+                default:
+                    Hotels = Hotels.OrderBy(h => h.HotelNr).ToList(); 
+                    break;
             }
         }
     }

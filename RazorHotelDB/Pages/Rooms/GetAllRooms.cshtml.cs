@@ -24,6 +24,11 @@ namespace RazorHotelDB.Pages.Rooms
             Hotels = new List<Hotel>();
         }
 
+        public async Task OnGetMyRooms(int cid) {
+            HotelNr = cid;
+            Rooms = await _roomService.GetAllRoomAsync(cid);
+        }
+
         public async Task<IActionResult> OnGetAsync(int hid)
         {
             

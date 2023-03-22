@@ -44,8 +44,8 @@ namespace RazorHotelDB.Pages.Rooms
             Room.Types = RoomType.ToString()[0];
             createResult = await roomService.CreateRoomAsync(HotelNr, Room);
             if (createResult) {
-                return RedirectToPage("GetAllRooms");
-                //return RedirectToPage("GetAllRooms", "MyRooms", new { cid = HotelNr });
+                //return RedirectToPage("GetAllRooms");
+                return RedirectToPage("GetAllRooms", "MyRooms", new { cid = HotelNr });
                 //spørg Poul om MyRooms
             }
             else {

@@ -10,6 +10,14 @@
     Search <input type="text" asp-for="FilterCriteria"/>
     <input type="submit" value="Filter"/>
 </form>
+<p></p>
+
+<form method="get">
+    <input type="radio" name="sortOrder" value="hotelNo"> Hotel No
+    <input type="radio" name="sortOrder" value="name"> Name
+    <input type="radio" name="sortOrder" value="address"> Address
+    <input type="submit" value="Sort">
+</form>
 
 <p>
     <a asp-page="CreateHotel">Create Hotel</a>

@@ -192,6 +192,7 @@ namespace RazorHotelDB.Services {
                 catch (Exception ex)
                 {
                     Console.WriteLine("Generel fejl " + ex.Message);
+                    throw ex;
                 }
             }
             return false;
