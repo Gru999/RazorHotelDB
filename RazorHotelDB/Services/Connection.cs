@@ -7,8 +7,9 @@
 
         public Connection(IConfiguration configuration)
         {
+            connectionString = Secret.ConnectionString;
             Configuration = configuration;
-            connectionString = Configuration["ConnectionStrings:SimplyStorage"];
+            //connectionString = Configuration["ConnectionStrings:SimplyStorage"];
         }
     }
 }
