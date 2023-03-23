@@ -8,13 +8,13 @@ namespace HotelTest
     [TestClass]
     public class HotelServiceTest
     {
-        //connectionString = Secret.ConnectionString;
+        //private string connectionString = RazorHotelDB.Services.Secret.ConnectionString;
         [TestMethod]
         public void TestAddHotel()
         {
-
+            
             //Arrange
-            HotelService hotelService = new HotelService(connectionString);
+            HotelService hotelService = new HotelService();
             List<Hotel> hotels = hotelService.GetAllHotelAsync().Result;
 
             //Act

@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using RazorHotelDB.Interfaces;
 using RazorHotelDB.Models;
+using System.Runtime.InteropServices;
 using System.Xml.Linq;
 
 namespace RazorHotelDB.Services {
@@ -21,7 +22,15 @@ namespace RazorHotelDB.Services {
 
         private string queryFilterId = "select * from Hotel where Hotel_No = @ID";
 
+        public HotelService():base()
+        {
+            
+        }
         public HotelService(IConfiguration configuration) : base(configuration) {
+        }
+
+        public HotelService(string connectionString) : base(connectionString)
+        {
         }
 
         public async Task<bool> CreateHotelAsync(Hotel hotel) {
