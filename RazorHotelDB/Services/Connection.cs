@@ -16,8 +16,11 @@
         public Connection(IConfiguration configuration)
         {
             connectionString = Secret.ConnectionString;
+
+
+            //Used for testing exception handling
+            //connectionString = Secret.ErrorconnectionString;
             Configuration = configuration;
-            //connectionString = Configuration["ConnectionStrings:SimplyStorage"];
         }
     }
 }

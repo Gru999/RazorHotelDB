@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using RazorHotelDB.Interfaces;
 using RazorHotelDB.Models;
 using System.Runtime.CompilerServices;
+using RazorHotelDB.Services;
 
 namespace RazorHotelDB.Pages.Hotels
 {
@@ -13,32 +14,49 @@ namespace RazorHotelDB.Pages.Hotels
         [BindProperty(SupportsGet = true)]
         public string FilterCriteria { get; set; }
         public List<Hotel> Hotels { get; set; }
+        public string UserName { get; set; }
         private IHotelService _hotelService;
 
         public GetAllHotelsModel(IHotelService hotelService)
         {
             _hotelService = hotelService;
         }
-        public async Task OnGetAsync(string sortOrder)
+        public async Task<IActionResult> OnGetAsync(string sortOrder)
         {
-            if (!FilterCriteria.IsNullOrEmpty()) {
-                Hotels = await _hotelService.GetHotelsByNameAsync(FilterCriteria);
+            UserName = HttpContext.Session.GetString("UserName");
+            if (UserName == null)
+            {
+                return RedirectToPage("/Login");
             }
-            else {
-                Hotels = await _hotelService.GetAllHotelAsync();
-            }
+            try
+            {
+                if (!FilterCriteria.IsNullOrEmpty())
+                {
+                    Hotels = await _hotelService.GetHotelsByNameAsync(FilterCriteria);
+                }
+                else
+                {
+                    Hotels = await _hotelService.GetAllHotelAsync();
+                }
 
-            switch (sortOrder) {
-                case "name":
-                    Hotels = Hotels.OrderBy(h => h.Navn).ToList(); 
-                    break;
-                case "address":
-                    Hotels = Hotels.OrderBy(h => h.Adresse).ToList(); 
-                    break;
-                default:
-                    Hotels = Hotels.OrderBy(h => h.HotelNr).ToList(); 
-                    break;
+                switch (sortOrder) {
+                    case "name":
+                        Hotels = Hotels.OrderBy(h => h.Navn).ToList();
+                        break;
+                    case "address":
+                        Hotels = Hotels.OrderBy(h => h.Adresse).ToList();
+                        break;
+                    default:
+                        Hotels = Hotels.OrderBy(h => h.HotelNr).ToList();
+                        break;
+                }
             }
+            catch (Exception ex)
+            {
+                Hotels = new List<Models.Hotel>();
+                ViewData["ErrorMessage"] = ex.Message;
+            }
+            return Page();
         }
     }
 }

@@ -4,6 +4,7 @@
     ViewData["Title"] = "GetAllHotels";
 }
 
+
 <h1>Welcome to the hotel site</h1>
 
 <form method="get">
@@ -55,7 +56,8 @@
                     <td>
                         <a asp-page="UpdateHotel" asp-route-id="@item.HotelNr">Update</a> |
                         <a asp-page="DeleteHotel" asp-route-id="@item.HotelNr">Delete</a> |
-                        <a asp-page="/Rooms/CreateRoom" asp-route-id="@item.HotelNr">Create Room</a>                        
+                        <a asp-page="/Rooms/CreateRoom" asp-route-id="@item.HotelNr">Create Room</a> |
+                        <a asp-page="/Rooms/GetAllRooms" asp-page-handler="MyRooms" asp-route-cid="@item.HotelNr" asp-route-hname="@item.Navn">Rooms in hotel</a>
                     </td>
                 </tr>
             }

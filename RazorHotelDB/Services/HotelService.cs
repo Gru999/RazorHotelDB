@@ -29,9 +29,9 @@ namespace RazorHotelDB.Services {
         public HotelService(IConfiguration configuration) : base(configuration) {
         }
 
-        public HotelService(string connectionString) : base(connectionString)
-        {
-        }
+        //public HotelService(string connectionString) : base(connectionString)
+        //{
+        //}
 
         public async Task<bool> CreateHotelAsync(Hotel hotel) {
             using (SqlConnection connection = new SqlConnection(connectionString)) {
@@ -57,26 +57,29 @@ namespace RazorHotelDB.Services {
         //put gethotelfromidasync outside the query
         public async Task<Hotel> DeleteHotelAsync(int hotelNr)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString)) 
             {
-                try
+                using (SqlCommand command = new SqlCommand(queryDelete, connection)) 
                 {
-                    SqlCommand command = new SqlCommand(queryDelete, connection);
+                    Hotel h = await GetHotelFromIdAsync(hotelNr);
                     command.Parameters.AddWithValue("@HotelNr", hotelNr);
-                    await command.Connection.OpenAsync();
-                    SqlDataReader reader = await command.ExecuteReaderAsync();
-                    if (await reader.ReadAsync())
+                    try
                     {
-                        return await GetHotelFromIdAsync(hotelNr);
+                        await command.Connection.OpenAsync();
+                        int noOfRows = await command.ExecuteNonQueryAsync();
+                        if (noOfRows == 1) {
+                            return h;
+                        }
+                        return null;
                     }
-                }
-                catch (SqlException sqlEx)
-                {
-                    Console.WriteLine("Database error " + sqlEx.Message);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Generel fejl " + ex.Message);
+                    catch (SqlException sqlEx)
+                    {
+                        Console.WriteLine("Database error " + sqlEx.Message);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Generel fejl " + ex.Message);
+                    }
                 }
             }
             return null;
@@ -105,12 +108,14 @@ namespace RazorHotelDB.Services {
                     catch (SqlException sqlEx)
                     {
                         Console.WriteLine("Database error " + sqlEx.Message);
-                        return null;
+                        throw sqlEx;
+                        //return null;
                     }
                     catch (Exception exp)
                     {
                         Console.WriteLine("Generel fejl" + exp.Message);
-                        return null;
+                        throw exp;
+                        //return null;
                     }
                 }
             }
