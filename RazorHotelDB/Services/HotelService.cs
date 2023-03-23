@@ -54,6 +54,7 @@ namespace RazorHotelDB.Services {
             return false;
         }
 
+        //put gethotelfromidasync outside the query
         public async Task<Hotel> DeleteHotelAsync(int hotelNr)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
